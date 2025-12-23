@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Select Source - StreamSnap</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .source-count {
+        transition: all 0.2s ease;
+      }
+
+      .real-time-indicator {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 bg-opacity-50 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[80vh] flex flex-col">
+      <!-- Header -->
+      <div class="p-6 border-b border-gray-200 relative">
+        <!-- Real-time indicator -->
+        <div class="real-time-indicator" title="Real-time detection active"></div>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Choose What to Record</h2>
+            <p class="text-gray-600">Select a window or screen to start recording</p>
+          </div>
+          <button
+            id="closeBtn"
+            class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
+          >
+            <span class="text-gray-500">✕</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="flex border-b border-gray-200">
+        <button
+          id="screenTab"
+          class="flex-1 py-4 px-6 text-center font-semibold border-b-2 border-blue-500 text-blue-600 bg-blue-50 relative"
+        >
+          <span class="mr-2">🖥️</span>
+          Screens
+        </button>
+        <button
+          id="windowTab"
+          class="flex-1 py-4 px-6 text-center font-semibold border-b-2 border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-all relative"
+        >
+          <span class="mr-2">🪟</span>
+          Windows
+        </button>
+      </div>
+
+      <!-- Info Banner for Windows Tab -->
+      <div id="windowInfoBanner" class="hidden bg-amber-50 border-l-4 border-amber-400 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <span class="text-amber-400 text-lg">💡</span>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-amber-800">
+              <strong>Live detection:</strong> Windows will appear automatically when opened. Only visible
+              (non-minimized) windows are shown.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="flex-1 overflow-hidden">
+        <!-- Screens Tab Content -->
+        <div id="screenContent" class="h-full p-6 overflow-hidden">
+          <div id="screenSources" class="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto max-h-[250px] pb-6 pr-2">
+            <!-- Screen sources will be populated here -->
+          </div>
+          <div id="noScreens" class="hidden text-center py-12">
+            <div class="text-gray-400 text-6xl mb-4">🖥️</div>
+            <p class="text-gray-500 text-lg">No screens available to record</p>
+          </div>
+        </div>
+
+        <!-- Windows Tab Content -->
+        <div id="windowContent" class="h-full p-6 overflow-hidden hidden">
+          <div
+            id="windowSources"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto max-h-[250px] pb-6 pr-2"
+          >
+            <!-- Window sources will be populated here -->
+          </div>
+          <div id="noWindows" class="hidden text-center py-12">
+            <div class="text-gray-400 text-6xl mb-4">🪟</div>
+            <p class="text-gray-500 text-lg mb-2">No windows available to record</p>
+            <p class="text-gray-400 text-sm mb-3">Open an application and it will appear here automatically</p>
+            <div class="bg-gray-50 rounded-lg p-4 max-w-md mx-auto">
+              <p class="text-xs text-gray-500 text-left">
+                <strong>Live Detection Active 🟢</strong><br />
+                1. Open any application (Chrome, Safari, etc.)<br />
+                2. Make sure it's visible (not minimized)<br />
+                3. It will appear here automatically
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-6 border-t border-gray-200 flex justify-between items-center">
+        <button
+          id="cancelBtn"
+          class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition-colors"
+        >
+          Cancel
+        </button>
+
+        <div class="flex items-center space-x-4">
+          <div id="selectedInfo" class="hidden text-sm text-gray-600">
+            <span id="selectedName">No source selected</span>
+          </div>
+          <button
+            id="startRecordingBtn"
+            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            disabled
+          >
+            Start Recording
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/source-selector.js"></script>
+  </body>
+</html>

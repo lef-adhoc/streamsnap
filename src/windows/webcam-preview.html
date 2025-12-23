@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Webcam Preview</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+      }
+      body {
+        -webkit-app-region: no-drag;
+        overflow: hidden;
+      }
+      #previewWrapper {
+        width: 320px;
+        height: 180px;
+        background: rgba(0, 0, 0, 0.45);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        position: relative;
+        touch-action: none;
+      }
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        background: #000;
+      }
+      #handle {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        cursor: move;
+        /* Make handle a draggable region so the user can move the webcam window */
+        -webkit-app-region: drag;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="previewWrapper" aria-hidden="false">
+      <div id="handle">≡</div>
+      <video id="webcamVideo" autoplay muted playsinline></video>
+    </div>
+
+    <script src="../js/webcam-preview-renderer.js"></script>
+  </body>
+</html>

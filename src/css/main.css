@@ -1,0 +1,24 @@
+.tab-button.active {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.tab-panel.hidden {
+  display: none;
+}
+
+input[type='checkbox']:checked + label .toggle-bg {
+  background-color: #3b82f6;
+}
+
+input[type='checkbox']:checked + label .toggle-dot {
+  transform: translateX(1rem);
+}
+
+.toggle-bg {
+  transition: background-color 0.3s ease;
+}
+
+.toggle-dot {
+  transition: transform 0.3s ease;
+}

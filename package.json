@@ -1,0 +1,194 @@
+{
+  "name": "streamsnap",
+  "version": "1.0.0",
+  "description": "Professional screen recording application built with Electron",
+  "main": "main.js",
+  "homepage": "https://github.com/lef-adhoc/streamsnap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lef-adhoc/streamsnap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lef-adhoc/streamsnap/issues"
+  },
+  "scripts": {
+    "dev": "npm run build:css && electron . --max-old-space-size=4096",
+    "start": "electron . --max-old-space-size=4096",
+    "build:css": "tailwindcss -i ./src/input.css -o ./src/styles.css --minify",
+    "build:icons": "npm run build:icons:mac",
+    "build:icons:mac": "mkdir -p build/icon.iconset && sips -z 16 16 src/icon.png --out build/icon.iconset/icon_16x16.png && sips -z 32 32 src/icon.png --out build/icon.iconset/icon_16x16@2x.png && sips -z 32 32 src/icon.png --out build/icon.iconset/icon_32x32.png && sips -z 64 64 src/icon.png --out build/icon.iconset/icon_32x32@2x.png && sips -z 128 128 src/icon.png --out build/icon.iconset/icon_128x128.png && sips -z 256 256 src/icon.png --out build/icon.iconset/icon_256x256.png && sips -z 512 512 src/icon.png --out build/icon.iconset/icon_256x256@2x.png && sips -z 512 512 src/icon.png --out build/icon.iconset/icon_512x512.png && sips -z 1024 1024 src/icon.png --out build/icon.iconset/icon_512x512@2x.png && iconutil -c icns build/icon.iconset -o src/icon.icns",
+    "clean": "rm -rf dist/ && rm -rf build/",
+    "prebuild": "npm run clean && npm run build:css",
+    "build": "npm run prebuild && electron-builder --mac dmg --publish=never",
+    "build:app-only": "npm run prebuild && electron-builder --mac dir --publish=never",
+    "build:zip": "npm run prebuild && electron-builder --mac zip --publish=never",
+    "build:dmg": "npm run prebuild && electron-builder --mac dmg --publish=never",
+    "build:all-mac": "npm run prebuild && electron-builder --mac --publish=never",
+    "build:simple": "npm run prebuild && electron-builder --mac dir --publish=never",
+    "build:all": "npm run prebuild && electron-builder --publish=never",
+    "build:win": "npm run prebuild && electron-builder --win --publish=never",
+    "build:linux": "npm run prebuild && electron-builder --linux --publish=never",
+    "dist": "npm run prebuild && electron-builder --publish=never",
+    "format": "prettier --write \"src/**/*.{js,html,css}\" \"*.{js,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,html,css}\" \"*.{js,json,md}\"",
+    "lint": "eslint src/ main.js",
+    "lint:fix": "eslint src/ main.js --fix",
+    "test": "echo \"No tests specified\" && exit 0",
+    "validate": "node -e \"require('./src/config/environment')\"",
+    "diagnose": "node diagnose-build.js",
+    "prepack": "npm run build:css"
+  },
+  "keywords": [
+    "screen-recording",
+    "electron",
+    "desktop-app",
+    "video-recording",
+    "google-drive",
+    "cross-platform",
+    "open-source"
+  ],
+  "author": {
+    "name": "StreamSnap Team",
+    "email": "contact@streamsnap.app",
+    "url": "https://streamsnap.app"
+  },
+  "contributors": [],
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "googleapis": "^169.0.0",
+    "node-fetch": "^2.7.0"
+  },
+  "optionalDependencies": {
+    "keytar": "^7.9.0"
+  },
+  "devDependencies": {
+    "electron": "^30.5.1",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.57.1",
+    "prettier": "^3.7.4",
+    "tailwindcss": "^3.4.15"
+  },
+  "build": {
+    "appId": "com.streamsnap.desktop",
+    "productName": "StreamSnap",
+    "copyright": "Copyright © 2025 StreamSnap Team",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "src/**/*",
+      "tailwind.config.js",
+      ".env",
+      "!src/**/*.map",
+      "!**/*.{ts,tsx}",
+      "!*.d.ts"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "dir",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.video",
+      "icon": "src/icon.icns",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "darkModeSupport": true,
+      "identity": null,
+      "entitlements": "entitlements.mac.plist",
+      "minimumSystemVersion": "10.13.0"
+    },
+    "dmg": {
+      "icon": "src/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "backgroundColor": "#ffffff",
+      "title": "${productName} ${version}"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/icon.png",
+      "publisherName": "StreamSnap Team"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "src/icon.png",
+      "category": "AudioVideo"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "buildDependenciesFromSource": false,
+    "nodeGypRebuild": false,
+    "npmRebuild": false,
+    "includeSubNodeModules": false
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off",
+      "semi": [
+        "error",
+        "always"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+video:fullscreen,
+video:-webkit-full-screen,
+video:-moz-full-screen,
+video:-ms-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+  background: #000 !important;
+  z-index: 2147483647 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+*:fullscreen video,
+*:-webkit-full-screen video,
+*:-moz-full-screen video,
+*:-ms-fullscreen video {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: contain !important;
+  background: #000 !important;
+}
+
+#localFolderPath {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.flex.gap-2 {
+  overflow: hidden;
+}

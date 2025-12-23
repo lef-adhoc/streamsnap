@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.8);
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          sans-serif;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .countdown-container {
+        text-align: center;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      #countdownNumber {
+        font-size: 12rem;
+        font-weight: 700;
+        color: white;
+        line-height: 1;
+        margin: 0;
+        text-shadow:
+          0 0 20px rgba(255, 255, 255, 0.3),
+          0 0 40px rgba(255, 255, 255, 0.2),
+          0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #countdownNumber.pulse {
+        transform: scale(1.2);
+        text-shadow:
+          0 0 30px rgba(59, 130, 246, 0.6),
+          0 0 60px rgba(59, 130, 246, 0.4),
+          0 4px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      .countdown-text {
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 2rem;
+        font-weight: 500;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        #countdownNumber {
+          font-size: 8rem;
+        }
+
+        .countdown-text {
+          font-size: 1.2rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #countdownNumber {
+          font-size: 6rem;
+        }
+
+        .countdown-text {
+          font-size: 1rem;
+        }
+      }
+
+      .countdown-container {
+        animation: fadeInScale 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes fadeInScale {
+        0% {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="countdown-container">
+      <div id="countdownNumber">5</div>
+      <div class="countdown-text">Recording starts in...</div>
+    </div>
+
+    <script src="../js/countdown-renderer.js"></script>
+  </body>
+</html>
