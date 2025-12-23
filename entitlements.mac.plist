@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Camera access for webcam recording -->
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    
+    <!-- Microphone access for audio recording -->
+    <key>com.apple.security.device.microphone</key>
+    <true/>
+    
+    <!-- Audio input for system audio capture -->
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    
+    <!-- Required for Electron apps with JIT -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    
+    <!-- Required for native modules and dynamic code -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    
+    <!-- Required for native dependencies -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+    
+    <!-- Network access for Google Drive integration -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- Network server for OAuth callback -->
+    <key>com.apple.security.network.server</key>
+    <true/>
+    
+    <!-- File system access for saving recordings -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- Downloads folder access -->
+    <key>com.apple.security.files.downloads.read-write</key>
+    <true/>
+    
+    <!-- Desktop folder access -->
+    <key>com.apple.security.files.desktop.read-write</key>
+    <true/>
+    
+    <!-- Documents folder access -->
+    <key>com.apple.security.files.documents.read-write</key>
+    <true/>
+    
+    <!-- Allow outgoing network connections -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- Allow incoming network connections for OAuth -->
+    <key>com.apple.security.network.server</key>
+    <true/>
+    
+    <!-- Disable automatic termination -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+    
+    <!-- Allow access to system information -->
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <true/>
+</dict>
+</plist>

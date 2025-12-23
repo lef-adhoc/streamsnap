@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Save Recording</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://yt3.ggpht.com; media-src 'self' blob:;"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../css/save-video.css" />
+    <link rel="stylesheet" href="../css/drive-success-modal.css" />
+    <link rel="stylesheet" href="../css/folder-picker-modal.css" />
+  </head>
+  <body class="bg-slate-50 p-4 font-sans">
+    <div id="mainContent" class="bg-white rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
+      <div class="text-center mb-5">
+        <div class="w-8 h-8 bg-green-500 rounded-full inline-flex items-center justify-center mb-3 text-sm">✅</div>
+        <h2 class="text-xl font-bold text-gray-800 mb-1">Recording Complete!</h2>
+        <p class="text-gray-500 text-sm">Choose how to save your screen recording</p>
+      </div>
+
+      <div class="bg-gray-50 rounded-lg p-3 mb-5">
+        <video id="previewVideo" controls muted class="w-full rounded-md bg-black max-h-48 object-contain"></video>
+        <div class="flex justify-between mt-2 text-xs text-gray-500">
+          <span id="videoDuration">Duration: --:--</span>
+          <span id="videoSize">Size: -- MB</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-medium mb-2 text-gray-700 text-sm">File Name</label>
+        <input
+          type="text"
+          id="fileName"
+          placeholder="Enter file name"
+          class="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+        />
+      </div>
+
+      <!-- Save Options -->
+      <div class="space-y-3 mb-5">
+        <!-- Local Save Option -->
+        <div id="localSaveSection" class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">💾</span>
+              <h3 class="font-medium text-gray-800 text-sm">Save to Computer</h3>
+            </div>
+            <button
+              id="localSaveBtn"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md font-medium transition-colors text-sm"
+            >
+              Save Local
+            </button>
+          </div>
+          <div class="mb-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">Save to folder:</label>
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="localFolderPath"
+                readonly
+                class="flex-1 px-2 py-1.5 border border-gray-300 rounded-md bg-gray-50 text-xs text-gray-600"
+                placeholder="Select folder..."
+              />
+              <button
+                id="browseLocalBtn"
+                class="px-2 py-1.5 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-xs font-medium transition-colors"
+              >
+                Browse
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Drive Accounts Section -->
+        <div
+          id="driveAccountsSection"
+          class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4 hidden"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-7 h-7 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center"
+              >
+                <span class="text-white text-sm">☁️</span>
+              </div>
+              <div>
+                <h3 class="font-medium text-gray-800 text-sm">Google Drive Accounts</h3>
+                <p class="text-xs text-gray-600">Save to individual accounts</p>
+              </div>
+            </div>
+            <button
+              id="addMoreAccountsBtn"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all hover:scale-105"
+            >
+              <span class="mr-1">+</span> Add Account
+            </button>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Available accounts:</label>
+            <div
+              id="driveAccountsList"
+              class="space-y-2 max-h-64 overflow-y-auto bg-white/70 backdrop-blur-sm rounded-md p-3 border border-green-200"
+            >
+              <!-- Accounts will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- No Drive Accounts prompt -->
+        <div id="noDriveAccountsSection" class="mb-4 hidden">
+          <div class="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div>
+              <h3 class="font-medium text-gray-800 text-sm">Google Drive</h3>
+              <p class="text-xs text-gray-600">Add Drive accounts to save recordings to the cloud.</p>
+            </div>
+            <button
+              id="manageDriveAccountsBtn"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-xs font-medium"
+            >
+              Manage Accounts
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="youtubeAccountsSection"
+          class="bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-lg p-4 hidden"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-7 h-7 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center"
+              >
+                <span class="text-white text-sm">▶️</span>
+              </div>
+              <div>
+                <h3 class="font-medium text-gray-800 text-sm">YouTube Accounts</h3>
+                <p class="text-xs text-gray-600">Upload to YouTube channels</p>
+              </div>
+            </div>
+            <button
+              id="addMoreYouTubeAccountsBtn"
+              class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all hover:scale-105"
+            >
+              <span class="mr-1">+</span> Add Account
+            </button>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Available accounts:</label>
+            <div
+              id="youtubeAccountsList"
+              class="space-y-2 max-h-64 overflow-y-auto bg-white/70 backdrop-blur-sm rounded-md p-3 border border-red-200"
+            ></div>
+          </div>
+        </div>
+
+        <!-- No YouTube Accounts prompt -->
+        <div id="noYouTubeAccountsSection" class="mb-4 hidden">
+          <div class="flex items-center justify-between bg-red-50 border border-red-200 rounded-lg p-3">
+            <div>
+              <h3 class="font-medium text-gray-800 text-sm">YouTube</h3>
+              <p class="text-xs text-gray-600">Add YouTube accounts to upload recordings directly.</p>
+            </div>
+            <button
+              id="manageYouTubeAccountsBtn"
+              class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-xs font-medium"
+            >
+              Manage Accounts
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2 justify-end">
+        <button
+          id="discardBtn"
+          class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md border border-gray-300 transition-colors text-sm"
+          title="Discard"
+        >
+          🗑️ Discard
+        </button>
+      </div>
+
+      <div id="savingState" class="hidden text-center py-4 text-gray-500">
+        <div
+          class="inline-block w-4 h-4 border-2 border-gray-200 border-t-blue-500 rounded-full animate-spin mr-2"
+        ></div>
+        <span id="savingText" class="text-sm">Saving your recording...</span>
+      </div>
+    </div>
+
+    <script src="../js/video-fullscreen.js"></script>
+    <script src="../js/folder-picker-modal.js"></script>
+    <script src="../js/drive-success-modal.js"></script>
+    <script src="../js/save-renderer.js"></script>
+  </body>
+</html>

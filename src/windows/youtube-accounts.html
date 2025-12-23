@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; img-src 'self' https://yt3.ggpht.com;"
+    />
+    <title>YouTube Accounts</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(180deg, #fffbfb 0%, #f8fafc 50%, #e2e8f0 100%);
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+        color: #0f172a;
+      }
+
+      .page-shell {
+        padding: 36px 24px;
+        max-width: 960px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .hero-panel {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 28px;
+        padding: 26px;
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-panel h1 {
+        margin: 0;
+        font-size: 1.9rem;
+        font-weight: 600;
+      }
+
+      .hero-panel p {
+        margin: 4px 0 0;
+        color: #475569;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .hero-actions button {
+        font-weight: 600;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        padding: 10px 18px;
+        transition: transform 0.15s ease;
+      }
+
+      .hero-actions button:hover {
+        transform: translateY(-1px);
+      }
+
+      #addAccountBtn {
+        background: linear-gradient(135deg, #ef4444, #ec4899);
+        color: white;
+        box-shadow: 0 10px 30px rgba(236, 72, 153, 0.35);
+      }
+
+      #closeBtn {
+        background: #1f2937;
+        color: white;
+      }
+
+      .accounts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+      }
+
+      .account-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 22px;
+        padding: 18px;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        position: relative;
+      }
+
+      .account-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
+      }
+
+      .account-card-inner {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .avatar-shell {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        padding: 4px;
+        background: linear-gradient(135deg, #ef4444, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        background: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: white;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .avatar-inner img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .avatar-inner span {
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+      }
+
+      .account-details {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .account-name-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-right: 32px;
+      }
+
+      .account-name {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: rgba(34, 197, 94, 0.15);
+        color: #166534;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+      }
+
+      .status-pill:hover {
+        background: rgba(34, 197, 94, 0.25);
+        transform: scale(1.05);
+      }
+
+      .status-pill.inactive {
+        background: rgba(248, 113, 113, 0.18);
+        color: #b91c1c;
+      }
+
+      .status-pill.inactive:hover {
+        background: rgba(248, 113, 113, 0.28);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #22c55e;
+        display: inline-block;
+      }
+
+      .status-dot.inactive {
+        background: #f87171;
+      }
+
+      .account-email {
+        margin: 6px 0 2px;
+        color: #475569;
+        font-size: 0.9rem;
+      }
+
+      .account-channel {
+        margin: 0;
+        font-size: 0.8rem;
+        color: #94a3b8;
+      }
+
+      .account-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+        min-width: 190px;
+      }
+
+      .control-block {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .privacy-block {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .privacy-select {
+        border-radius: 8px;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        background: rgba(254, 242, 242, 0.5);
+        color: #0f172a;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        flex: 1;
+        max-width: 200px;
+        text-align: left;
+      }
+
+      .privacy-select:hover {
+        background: rgba(254, 242, 242, 0.8);
+        border-color: rgba(239, 68, 68, 0.3);
+      }
+
+      .privacy-select:focus {
+        outline: none;
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+
+      .switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        border-radius: 999px;
+        background: #e2e8f0;
+        padding: 2px;
+        cursor: pointer;
+      }
+
+      .switch input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background: #ffffff;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+        transform: translateX(0);
+      }
+
+      .switch input:checked + .slider {
+        transform: translateX(20px);
+        background: #22c55e;
+        box-shadow: 0 6px 14px rgba(34, 197, 94, 0.4);
+      }
+
+      .btn-remove {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        border: none;
+        background: rgba(248, 113, 113, 0.12);
+        color: #b91c1c;
+        border-radius: 50%;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+        opacity: 1;
+        z-index: 10;
+      }
+
+      .btn-remove:hover {
+        background: rgba(248, 113, 113, 0.35);
+        transform: scale(1.15);
+      }
+
+      .no-accounts {
+        padding: 28px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        text-align: center;
+        color: #64748b;
+        border: 1px dashed rgba(15, 23, 42, 0.15);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="hero-panel">
+        <div>
+          <h1>YouTube Accounts</h1>
+          <p>Keep your YouTube credentials, privacy defaults and activity state aligned with StreamSnap.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="addAccountBtn">
+            <span>+ Add Account</span>
+          </button>
+          <button id="closeBtn">Close</button>
+        </div>
+      </div>
+
+      <div id="accountsList" class="accounts-grid"></div>
+    </div>
+
+    <template id="accountTemplate">
+      <div class="account-card">
+        <button class="btn-remove">✕</button>
+        <div class="account-card-inner">
+          <div class="avatar-shell">
+            <div class="avatar-inner">
+              <img class="account-avatar-img" src="" alt="" />
+              <span class="account-avatar-initial">Y</span>
+            </div>
+          </div>
+
+          <div class="account-details">
+            <div class="account-name-row">
+              <div class="account-name">Channel Name</div>
+              <label class="status-pill">
+                <input type="checkbox" class="chk-active" style="display: none" />
+                <span class="status-dot"></span>
+                <span class="status-text">Active</span>
+              </label>
+            </div>
+            <p class="account-email">channel@example.com</p>
+            <p class="account-channel">Channel ID: <span class="account-channel-id">--</span></p>
+          </div>
+
+          <div class="account-controls">
+            <div class="control-block privacy-block">
+              <div style="display: flex; align-items: center; gap: 6px">
+                <span style="font-size: 1rem">🔒</span>
+                <span style="white-space: nowrap">Upload Privacy</span>
+              </div>
+              <select class="privacy-select">
+                <option value="private">Private (only you)</option>
+                <option value="unlisted">Unlisted (with link)</option>
+                <option value="public">Public (everyone)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script src="../js/youtube-accounts-renderer.js"></script>
+  </body>
+</html>
