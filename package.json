@@ -150,11 +150,6 @@
       "icon": "src/icon.png",
       "publisherName": "StreamSnap Team"
     },
-    // "linux": {
-    //   "target": "AppImage",
-    //   "icon": "src/icon.png",
-    //   "category": "AudioVideo"
-    // },
     "linux": {
       "target": [
         "AppImage",
